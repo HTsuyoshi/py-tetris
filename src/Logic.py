@@ -2,30 +2,33 @@ import pygame
 from pygame.locals import K_h, K_j, K_k, K_l, K_z, K_x, K_c, K_a, K_SPACE
 from pygame.locals import KEYUP, KEYDOWN
 
-from random import randint, shuffle
-from itertools import cycle
 from typing import Optional
 from copy import copy
 
 from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL
-from Tetromino import Shape, Tetromino
+from Shape import Shape
+from Tetromino import Tetromino
 from Randomizer import Randomizer, TGM
-from Colors import Colors
+from Colors import Colors, Color_mod
 
 class Tetromino_generator:
     def __init__(self):
-        self.shape_o_counter: int = 0
-        self.shape_i_counter: int = 0
-        self.shape_j_counter: int = 0
-        self.shape_lcounter: int = 0
-        self.shape_z_counter: int = 0
-        self.shape_s_counter: int = 0
-        self.shape_t_counter: int = 0
+        self.counter: dict[Shape, int] = {
+                Shape.SHAPE_J: 0,
+                Shape.SHAPE_L: 0,
+                Shape.SHAPE_S: 0,
+                Shape.SHAPE_Z: 0,
+                Shape.SHAPE_I: 0,
+                Shape.SHAPE_O: 0,
+                Shape.SHAPE_T: 0
+                }
         self.randomizer: Randomizer = TGM()
         self.history: list[Tetromino] = []
 
     def next_tetromino(self) -> Tetromino:
-        return self.randomizer.get_random(self.history)
+        tetromino: Tetromino = self.randomizer.get_random(self.history)
+        self.counter[tetromino.shape] += 1
+        return tetromino
 
     def add_history(self, tetromino: Tetromino):
         self.history.append(tetromino)
@@ -109,7 +112,7 @@ class Logic():
                 if self.current_tetromino.x + j > len(self.grid[0]) or self.current_tetromino.y + i > len(self.grid):
                     continue
                 if self.current_tetromino.get_shape()[i][j] == 'o':
-                    self.grid[self.current_tetromino.y + i][self.current_tetromino.x + j] = Colors.RED.value
+                    self.grid[self.current_tetromino.y + i][self.current_tetromino.x + j] = Color_mod().get_color[self.current_tetromino.shape].value
 
         self.can_change = True
         self.generator.add_history(self.current_tetromino)
@@ -118,9 +121,8 @@ class Logic():
         self.next_tetromino()
 
     def clear_row(self) -> None:
-        full_row = [Colors.RED.value for _ in range(10)]
         for row in range(len(self.grid)):
-            if self.grid[row] == full_row:
+            if Colors.BLACK.value not in self.grid[row]:
                 self.grid.remove(self.grid[row])
                 self.grid.insert(0, [Colors.BLACK.value for _ in range(10)])
 

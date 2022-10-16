@@ -3,11 +3,12 @@ from pygame.surface import Surface
 from pygame.font import SysFont, Font
 
 import sys
+from copy import copy
 
-from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, WINDOW_H, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE
+from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, WINDOW_H, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Tetromino import Tetromino
 from Content import Content
-from Colors import Colors
+from Colors import Colors, Color_mod
 from Logic import Logic
 
 class Game(Content):
@@ -33,6 +34,7 @@ class Game(Content):
         self.draw_score(display)
         self.draw_next_tetromino(display)
         self.draw_hold_tetromino(display)
+        if TETROMINO_SHADOW: self.draw_shadow_tetromino(display)
         self.draw_current_tetromino(display)
 
     def draw_grid(self, display: Surface) -> None:
@@ -113,12 +115,21 @@ class Game(Content):
                                 self.brick_size)
 
     def draw_current_tetromino(self, display: Surface) -> None:
-        if not self.game.current_tetromino:
-            return
+        if not self.game.current_tetromino: return
 
         x = GAME_W_START + (self.game.current_tetromino.x * BRICK_SIZE)
         y = GAME_H_START + (self.game.current_tetromino.y * BRICK_SIZE)
         self.draw_tetromino(display, x, y, self.game.current_tetromino)
+
+    def draw_shadow_tetromino(self, display: Surface):
+        if not self.game.current_tetromino: return
+
+        shadow_tetromino: Tetromino = copy(self.game.current_tetromino)
+        shadow_tetromino.hard_drop(self.game.grid)
+        shadow_tetromino.color = Color_mod().get_shadow[shadow_tetromino.color]
+        x = GAME_W_START + (shadow_tetromino.x * BRICK_SIZE)
+        y = GAME_H_START + (shadow_tetromino.y * BRICK_SIZE)
+        self.draw_tetromino(display, x, y, shadow_tetromino)
 
     def draw_tetromino(self, display: Surface, x_offset: int, y_offset: int, tetromino: Tetromino, brick_size: int = BRICK_SIZE):
         for i in range(4):
@@ -130,7 +141,8 @@ class Game(Content):
                 y = y_offset + (i * brick_size)
 
                 pygame.draw.rect(display,
-                                 Colors.RED.value,
+                                 tetromino.color.value,
                                  (x, y,
                                  brick_size,
                                  brick_size))
+

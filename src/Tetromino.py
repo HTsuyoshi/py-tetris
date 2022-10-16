@@ -1,8 +1,6 @@
 from Shape import Shape
 
-from Colors import Colors
-from enum import Enum
-from typing import Optional
+from Colors import Colors, Color_mod
 
 class SRS:
     # SRS System (J,L,S,T,Z)
@@ -52,6 +50,7 @@ class Tetromino:
         self.y: int = 0
         self.shape: Shape = shape
         self.rotation: int = 0
+        self.color: Colors = Color_mod().get_color[shape]
 
     def get_shape(self) -> list[str]:
         return self.shape.value[self.rotation % len(self.shape.value)]
@@ -111,12 +110,9 @@ class Tetromino:
         for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
             test_list.append((c[0] - n[0], c[1] - n[1]))
 
-        print('*'*20)
-        print(test_list)
-
         for test in test_list:
-            if self.check(self.x + test[0],
-                          self.y + test[1],
+            if self.check(self.x - test[0],
+                          self.y - test[1],
                           next,
                           grid):
                 self.x += test[0]
@@ -142,8 +138,15 @@ class Tetromino:
 
         print('*'*20)
         print(test_list)
+        for row in grid:
+            print(row)
 
         for test in test_list:
+            print(f'{test}')
+            print(f'{test[0]=}')
+            print(f'{test[1]=}')
+            print(f'{self.x + test[0]=}')
+            print(f'{self.y + test[1]=}')
             if self.check(self.x + test[0],
                           self.y + test[1],
                           next,
