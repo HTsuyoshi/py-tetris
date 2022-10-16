@@ -33,7 +33,7 @@ class Game(Content):
         self.draw_border(display)
         self.draw_score(display)
         self.draw_next_tetromino(display)
-        self.draw_hold_tetromino(display)
+        self.draw_swap_tetromino(display)
         if TETROMINO_SHADOW: self.draw_shadow_tetromino(display)
         self.draw_current_tetromino(display)
 
@@ -97,7 +97,7 @@ class Game(Content):
                                 self.game.next_tetrominos[i],
                                 self.brick_size)
 
-    def draw_hold_tetromino(self, display: Surface) -> None:
+    def draw_swap_tetromino(self, display: Surface) -> None:
         x: int = HOLD_TETROMINO_H
         y: int = HOLD_TETROMINO_W
         pygame.draw.rect(display,
@@ -132,8 +132,8 @@ class Game(Content):
         self.draw_tetromino(display, x, y, shadow_tetromino)
 
     def draw_tetromino(self, display: Surface, x_offset: int, y_offset: int, tetromino: Tetromino, brick_size: int = BRICK_SIZE):
-        for i in range(4):
-            for j in range(4):
+        for i in range(len(tetromino.get_shape())):
+            for j in range(len(tetromino.get_shape()[0])):
                 if tetromino.get_shape()[i][j] == ' ':
                     continue
 

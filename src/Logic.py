@@ -41,7 +41,7 @@ class Logic():
         self.score: int = 0
         self.grid: list[list[tuple[int,int,int]]] = [[(0,0,0) for _ in range(10)] for _ in range(22)]
         self.current_tetromino: Optional[Tetromino] = None
-        self.can_change: bool = True
+        self.can_swap: bool = True
         self.hold_tetromino: Optional[Tetromino] = None
         self.next_tetrominos: list[Tetromino] = []
         self.generator: Tetromino_generator = Tetromino_generator()
@@ -77,7 +77,7 @@ class Logic():
                 elif e.key == K_x:
                     self.current_tetromino.rotate_right(self.grid)
                 elif e.key == K_c:
-                    self.change_tetromino()
+                    self.swap_tetromino()
                 elif e.key == K_a:
                     self.lock_tetromino()
 
@@ -86,8 +86,8 @@ class Logic():
             self.next_tetrominos.append(self.generator.next_tetromino())
         self.current_tetromino = self.next_tetrominos.pop(0)
 
-    def change_tetromino(self) -> None:
-        if not self.can_change: return
+    def swap_tetromino(self) -> None:
+        if not self.can_swap: return
         if not self.current_tetromino: return
         self.current_tetromino.reset()
 
@@ -95,7 +95,7 @@ class Logic():
         if self.hold_tetromino: tetromino = self.hold_tetromino
 
         self.hold_tetromino = self.current_tetromino
-        self.can_change = False
+        self.can_swap = False
         self.frames = 0
 
         if tetromino:
@@ -115,7 +115,7 @@ class Logic():
                 if self.current_tetromino.get_shape()[i][j] == 'o':
                     self.grid[self.current_tetromino.y + i][self.current_tetromino.x + j] = Color_mod().get_color[self.current_tetromino.shape].value
 
-        self.can_change = True
+        self.can_swap = True
         self.generator.add_history(self.current_tetromino)
         self.frames = 0
         self.clear_row()
