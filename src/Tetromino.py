@@ -1,5 +1,4 @@
 from Shape import Shape
-
 from Colors import Colors, Color_mod
 
 class SRS:
@@ -110,18 +109,9 @@ class Tetromino:
         for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
             test_list.append((c[0] - n[0], c[1] - n[1]))
 
-        print('*'*20)
-        print(test_list)
-        for row in grid:
-            print(row)
         for test in test_list:
-            print(f'{test}')
-            print(f'{test[0]=}')
-            print(f'{test[1]=}')
-            print(f'{self.x + test[0]=}')
-            print(f'{self.y + test[1]=}')
-            if self.check(self.x - test[1],
-                          self.y - test[0],
+            if self.check(self.x + test[0],
+                          self.y + test[1],
                           next,
                           grid):
                 self.x += test[0]
@@ -145,28 +135,24 @@ class Tetromino:
         for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
             test_list.append((c[0] + n[0], c[1] + n[1]))
 
-        print('*'*20)
-        print(test_list)
-        for row in grid:
-            print(row)
         for test in test_list:
-            print(f'{test}')
-            print(f'{test[0]=}')
-            print(f'{test[1]=}')
-            print(f'{self.x + test[0]=}')
-            print(f'{self.y + test[1]=}')
             if self.check(self.x + test[0],
                           self.y + test[1],
                           next,
                           grid):
-                self.x += test[1]
-                self.y += test[0]
+                self.x += test[0]
+                self.y += test[1]
                 self.rotation = next
                 return True
+
         return False
 
-    def check(self, x: int, y: int,
-              rotation: int, grid: list[list[tuple[int,int,int]]]) -> bool:
+    def check(self,
+              x: int,
+              y: int,
+              rotation: int,
+              grid: list[list[tuple[int,int,int]]]) -> bool:
+
         new_tetromino: list[str] = self.shape.value[rotation % len(self.shape.value)]
         for i in range(4):
             for j in range(4):

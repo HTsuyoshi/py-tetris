@@ -41,5 +41,3 @@ Following [this guideline](https://harddrop.com/wiki/Tetris_Guideline)
 [Scoring System](https://harddrop.com/wiki/Category:Scoring_Systems): TO-DO
 
 [Tetromino Orientation](https://harddrop.com/wiki/Orientation): Default
-
-
