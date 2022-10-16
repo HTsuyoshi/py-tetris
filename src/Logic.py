@@ -5,7 +5,7 @@ from pygame.locals import KEYUP, KEYDOWN
 from typing import Optional
 from copy import copy
 
-from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL
+from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop
 from Shape import Shape
 from Tetromino import Tetromino
 from Randomizer import Randomizer, TGM
@@ -63,7 +63,8 @@ class Logic():
                 if e.key == K_h:
                     self.current_tetromino.left(self.grid)
                 elif e.key == K_j:
-                    self.current_tetromino.down(self.grid)
+                    if SOFT_DROP == Soft_drop.NORMAL: self.current_tetromino.down(self.grid)
+                    elif SOFT_DROP == Soft_drop.INSTANT: self.current_tetromino.hard_drop(self.grid)
                 elif e.key == K_k:
                     self.current_tetromino.rotate_180(self.grid)
                 elif e.key == K_l:

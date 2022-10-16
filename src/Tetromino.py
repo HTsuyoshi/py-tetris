@@ -110,9 +110,18 @@ class Tetromino:
         for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
             test_list.append((c[0] - n[0], c[1] - n[1]))
 
+        print('*'*20)
+        print(test_list)
+        for row in grid:
+            print(row)
         for test in test_list:
-            if self.check(self.x - test[0],
-                          self.y - test[1],
+            print(f'{test}')
+            print(f'{test[0]=}')
+            print(f'{test[1]=}')
+            print(f'{self.x + test[0]=}')
+            print(f'{self.y + test[1]=}')
+            if self.check(self.x - test[1],
+                          self.y - test[0],
                           next,
                           grid):
                 self.x += test[0]
@@ -140,7 +149,6 @@ class Tetromino:
         print(test_list)
         for row in grid:
             print(row)
-
         for test in test_list:
             print(f'{test}')
             print(f'{test[0]=}')
@@ -151,8 +159,8 @@ class Tetromino:
                           self.y + test[1],
                           next,
                           grid):
-                self.x += test[0]
-                self.y += test[1]
+                self.x += test[1]
+                self.y += test[0]
                 self.rotation = next
                 return True
         return False

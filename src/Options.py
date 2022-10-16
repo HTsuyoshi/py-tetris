@@ -1,3 +1,9 @@
+from enum import Enum
+
+class Soft_drop(Enum):
+    NORMAL = 0
+    INSTANT = 1
+
 # Settings
 TETROMINO_SHOWN: int = 5
 TETROMINO_SHADOW: bool = True
@@ -6,6 +12,7 @@ FALL_SPEED: int = FPS // 5
 LOCK_DELAY: int = FPS * 4
 KEY_REPEAT_INTERVAL: int = 20
 KEY_REPEAT_DELAY: int = 150
+SOFT_DROP: Soft_drop = Soft_drop.INSTANT
 
 # Graphics
 WINDOW_H: int = 800
