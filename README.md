@@ -2,6 +2,32 @@
 
 A little project using pygame.
 
+## Play
+
+### 1 - Install the dependencies in `requirements.txt`.
+
+```sh
+python3 -m pip install -r requirements.txt
+```
+
+### 2 - Run
+
+```sh
+python3 src/main.py
+```
+
+### 3 - Keys
+
+- `space`: hard drop
+- `a`: lock tetromino
+- `h`: left
+- `l`: right
+- `j`: down (soft drop)
+- `z`: rotate left
+- `x`: rotate right
+- `k`: rotate 180
+- `c`: hold tetromino
+
 ## Specifications
 
 Following [this guideline](https://harddrop.com/wiki/Tetris_Guideline)
