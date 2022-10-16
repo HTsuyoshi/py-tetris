@@ -1,25 +1,26 @@
 from Shape import Shape
 from Colors import Colors, Color_mod
 
+# SRS System (J,L,S,T,Z)
+#   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
+# 0 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
+# R ( 0, 0)  (+1, 0)  (+1,-1)  ( 0,+2)  (+1,+2)
+# 2 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
+# L ( 0, 0)  (-1, 0)  (-1,-1)  ( 0,+2)  (-1,+2)
+# SRS System (I)
+#   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
+# 0 ( 0, 0)  (-1, 0)  (+2, 0)  (-1, 0)  (+2, 0)
+# R (-1, 0)  ( 0, 0)  ( 0, 0)  ( 0,+1)  ( 0,-2)
+# 2 (-1,+1)  (+1,+1)  (-2,+1)  (+1, 0)  (-2, 0)
+# L ( 0,+1)  ( 0,+1)  ( 0,+1)  ( 0,-1)  ( 0,+2)
+# SRS System (O)
+#   Offset 1
+# 0 ( 0, 0)
+# R ( 0, -1)
+# 2 ( -1, -1)
+# L ( -1, 0)
+
 class SRS:
-    # SRS System (J,L,S,T,Z)
-    #   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
-    # 0 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
-    # R ( 0, 0)  (+1, 0)  (+1,-1)  ( 0,+2)  (+1,+2)
-    # 2 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
-    # L ( 0, 0)  (-1, 0)  (-1,-1)  ( 0,+2)  (-1,+2)
-    # SRS System (I)
-    #   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
-    # 0 ( 0, 0)  (-1, 0)  (+2, 0)  (-1, 0)  (+2, 0)
-    # R (-1, 0)  ( 0, 0)  ( 0, 0)  ( 0,+1)  ( 0,-2)
-    # 2 (-1,+1)  (+1,+1)  (-2,+1)  (+1, 0)  (-2, 0)
-    # L ( 0,+1)  ( 0,+1)  ( 0,+1)  ( 0,-1)  ( 0,+2)
-    # SRS System (O)
-    #   Offset 1
-    # 0 ( 0, 0)
-    # R ( 0, -1)
-    # 2 ( -1, -1)
-    # L ( -1, 0)
     def __init__(self, shape: Shape):
         if shape == Shape.SHAPE_I:
             self.rot = [
@@ -154,25 +155,14 @@ class Tetromino:
               grid: list[list[tuple[int,int,int]]]) -> bool:
 
         new_tetromino: list[str] = self.shape.value[rotation % len(self.shape.value)]
-        for i in range(4):
-            for j in range(4):
-                if x + j >= len(grid[0]) or y + i >= len(grid):
+        for i in range(len(new_tetromino)):
+            for j in range(len(new_tetromino)):
+                if new_tetromino[i][j] == ' ':
                     continue
-                if new_tetromino[i][j] == 'o' and grid[y + i][x + j] != Colors.BLACK.value:
+                if x + j < 0 or x + j >= len(grid[0]) or y + i >= len(grid):
                     return False
-
-        max_left: int = min(i.find('o') for i in new_tetromino if i.find('o') != -1)
-        if x + max_left < 0:
-            return False
-
-        max_right: int = max(i.rfind('o') for i in new_tetromino if i.find('o') != -1)
-        if x + max_right >= len(grid[0]):
-            return False
-
-        max_down: int = max(i for i in range(4) if new_tetromino[i].find('o') != -1)
-        if y + max_down >= len(grid):
-            return False
-
+                if grid[y + i][x + j] != Colors.BLACK.value:
+                    return False
         return True
 
     def reset(self):
