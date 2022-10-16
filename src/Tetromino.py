@@ -1,5 +1,51 @@
 from Shape import Shape
 
+from Colors import Colors
+from enum import Enum
+from typing import Optional
+
+class SRS:
+    # SRS System (J,L,S,T,Z)
+    #   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
+    # 0 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
+    # R ( 0, 0)  (+1, 0)  (+1,-1)  ( 0,+2)  (+1,+2)
+    # 2 ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)  ( 0, 0)
+    # L ( 0, 0)  (-1, 0)  (-1,-1)  ( 0,+2)  (-1,+2)
+    # SRS System (I)
+    #   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5
+    # 0 ( 0, 0)  (-1, 0)  (+2, 0)  (-1, 0)  (+2, 0)
+    # R (-1, 0)  ( 0, 0)  ( 0, 0)  ( 0,+1)  ( 0,-2)
+    # 2 (-1,+1)  (+1,+1)  (-2,+1)  (+1, 0)  (-2, 0)
+    # L ( 0,+1)  ( 0,+1)  ( 0,+1)  ( 0,-1)  ( 0,+2)
+    # SRS System (O)
+    #   Offset 1
+    # 0 ( 0, 0)
+    # R ( 0, -1)
+    # 2 ( -1, -1)
+    # L ( -1, 0)
+    def __init__(self, shape: Shape):
+        if shape == Shape.SHAPE_I:
+            self.rot = [
+                    [(0, 0), (-1, 0), (2, 0), (-1, 0), (2, 0)],
+                    [(-1, 0), ( 0, 0), ( 0, 0), ( 0, 1), ( 0, -2)],
+                    [(-1, 1), (1, 1), (-2, 1), (1, 0), (-2, 0)],
+                    [(0, 1), (0, 1), (0, 1), (0, -1), ( 0, 2)]
+                    ]
+        elif shape == Shape.SHAPE_O:
+            self.rot = [
+                    [(0, 0)],
+                    [(0, -1)],
+                    [(-1, -1)],
+                    [(-1, 0)]
+                    ]
+        else:
+            self.rot = [
+                    [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0, 0), (1, 0), (1, -1), (0, 2), (1, 2)],
+                    [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)],
+                    [(0, 0), (-1, 0), (-1, -1), (0, 2), (-1, 2)]
+                    ]
+
 class Tetromino:
     def __init__(self, shape: Shape) -> None:
         self.x: int = 3
@@ -10,139 +56,113 @@ class Tetromino:
     def get_shape(self) -> list[str]:
         return self.shape.value[self.rotation % len(self.shape.value)]
 
-    def right(self, grid: list[list[str]]) -> bool:
-        if self.check(self.x + 1, self.y, self.rotation, grid):
+    def right(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        if self.check(self.x + 1,
+                      self.y,
+                      self.rotation,
+                      grid):
             self.x += 1
             return True
         return False
 
-    def left(self, grid: list[list[str]]) -> bool:
-        if self.check(self.x - 1, self.y, self.rotation, grid):
+    def left(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        if self.check(self.x - 1,
+                      self.y,
+                      self.rotation,
+                      grid):
             self.x -= 1
             return True
         return False
 
-    def down(self, grid: list[list[str]]) -> bool:
-        if self.check(self.x, self.y + 1, self.rotation, grid):
+    def down(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        if self.check(self.x,
+                      self.y + 1,
+                      self.rotation,
+                      grid):
             self.y += 1
             return True
         return False
 
-    def hard_drop(self, grid: list[list[str]]) -> None:
+    def hard_drop(self, grid: list[list[tuple[int,int,int]]]) -> None:
         if self.down(grid):
             self.hard_drop(grid)
 
-    def rotate_180(self, grid: list[list[str]]) -> bool:
-        if self.check(self.x, self.y, self.rotation + 2, grid):
+    def rotate_180(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        if self.check(self.x,
+                      self.y,
+                      self.rotation + 2,
+                      grid):
             self.rotation += 2
             return True
         return False
 
-    # Wallkick tests for J, L, S, T, Z
-    #          1       2       3       4       5
-    # 0->R	( 0, 0)	(-1, 0)	(-1,+1)	( 0,-2)	(-1,-2)
-    # R->2	( 0, 0)	(+1, 0)	(+1,-1)	( 0,+2)	(+1,+2)
-    # 2->L	( 0, 0)	(+1, 0)	(+1,+1)	( 0,-2)	(+1,-2)
-    # L->0	( 0, 0)	(-1, 0)	(-1,-1)	( 0,+2)	(-1,+2)
-    # 0 = 0; R = 1; 2 = 2; L = 3
-
-    # Wallkick tests for I
-    #          1       2       3       4       5
-    #0->R	( 0, 0)	(-2, 0)	(+1, 0)	(-2,-1)	(+1,+2)
-    #R->2	( 0, 0)	(-1, 0)	(+2, 0)	(-1,+2)	(+2,-1)
-    #2->L	( 0, 0)	(+2, 0)	(-1, 0)	(+2,+1)	(-1,-2)
-    #L->0	( 0, 0)	(+1, 0)	(-2, 0)	(+1,-2)	(-2,+1)
-
-    def rotate_right(self, grid: list[list[str]]) -> bool:
-        if self.check(self.x, self.y, self.rotation + 1, grid):
-            self.rotation += 1
+    def rotate_right(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        next: int = (self.rotation + 1) % 4
+        if self.check(self.x,
+                      self.y,
+                      next,
+                      grid):
+            self.rotation = next
             return True
 
-        tests: list[tuple[int,int]] = [(-1,-1)]
-        if self.shape == Shape.SHAPE_L:
-            if self.rotation == 0:
-                tests = [( 0, 0), (-2, 0), (+1, 0), (-2,-1), (+1,+2)]
-            if self.rotation == 1:
-                tests = [( 0, 0), (-1, 0), (+2, 0), (-1,+2), (+2,-1)]
-            if self.rotation == 2:
-                tests = [( 0, 0), (+2, 0), (-1, 0), (+2,+1), (-1,-2)]
-            if self.rotation == 3:
-                tests = [( 0, 0), (+1, 0), (-2, 0), (+1,-2), (-2,+1)]
-        else:
-            if self.rotation == 0:
-                tests = [(0, 0), (-2, 0), (1, 0), (2, -1), (1, 2)]
-            if self.rotation == 1:
-                tests = [(0, 0), (-1, 0), (2, 0), (-1, 2), (2, -1)]
-            if self.rotation == 2:
-                tests = [(0, 0), (2, 0), (-1, 0), (2, 1), (-1,-2)]
-            if self.rotation == 3:
-                tests = [(0, 0), (1, 0), (-2, 0), (1, -2), (-2, 1)]
+        kick_system: SRS = SRS(self.shape)
+        test_list: list[tuple[int,int]] = []
 
-        for test in tests:
-            if self.check(self.x + test[0], self.y + test[1], self.rotation - 1, grid):
+        for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
+            test_list.append((c[0] - n[0], c[1] - n[1]))
+
+        print('*'*20)
+        print(test_list)
+
+        for test in test_list:
+            if self.check(self.x + test[0],
+                          self.y + test[1],
+                          next,
+                          grid):
                 self.x += test[0]
                 self.y += test[1]
-                self.rotation += 1
-                return True
-
-        return False
-
-    # Wallkick tests for J, L, S, T, Z
-    #          1       2       3       4       5
-    # L->2	( 0, 0)	(-1, 0)	(-1,-1)	( 0,+2)	(-1,+2)
-    # 2->R	( 0, 0)	(-1, 0)	(-1,+1)	( 0,-2)	(-1,-2)
-    # R->0	( 0, 0)	(+1, 0)	(+1,-1)	( 0,+2)	(+1,+2)
-    # 0->L	( 0, 0)	(+1, 0)	(+1,+1)	( 0,-2)	(+1,-2)
-
-    # Wallkick tests for I
-    #          1       2       3       4       5
-    #0->L	( 0, 0)	(-1, 0)	(+2, 0)	(-1,+2)	(+2,-1)
-    #L->2	( 0, 0)	(-2, 0)	(+1, 0)	(-2,-1)	(+1,+2)
-    #2->R	( 0, 0)	(+1, 0)	(-2, 0)	(+1,-2)	(-2,+1)
-    #R->0	( 0, 0)	(+2, 0)	(-1, 0)	(+2,+1)	(-1,-2)
-
-    def rotate_left(self, grid: list[list[str]]) -> bool :
-        if self.check(self.x, self.y, self.rotation - 1, grid):
-            self.rotation -= 1
-            return True
-
-        tests: list[tuple[int,int]] = [(-1,-1)]
-        if self.shape == Shape.SHAPE_L:
-            if self.rotation == 0:
-                tests = [(0, 0), (-1, 0), (-1, -1), (0, +2), (-1, 2)]
-            if self.rotation == 1:
-                tests = [(0, 0), (-1, 0), (-1, 1), (0,-2), (-1, -2)]
-            if self.rotation == 2:
-                tests = [(0, 0), (1, 0), (1, -1), (0, 2), (1, 2)]
-            if self.rotation == 3:
-                tests = [(0, 0), (+1, 0), (1, 1), (0, -2), (1, -2)]
-        else:
-            if self.rotation == 0:
-                tests = [(0, 0), (1, 0), (2, 0), (-1, 2), (2, -1)]
-            if self.rotation == 1:
-                tests = [(0, 0), (2, 0), (1, 0), (-2, -1), (1, 2)]
-            if self.rotation == 2:
-                tests = [(0, 0), (1, 0), (-2, 0), (+1, -2), (-2, 1)]
-            if self.rotation == 3:
-                tests = [(0, 0), (2, 0), (-1, 0), (+2, 1), (-1, -2)]
-
-        for test in tests:
-            if self.check(self.x + test[0], self.y + test[1], self.rotation + 1, grid):
-                self.x += test[0]
-                self.y += test[1]
-                self.rotation += 1
+                self.rotation = next
                 return True
         return False
 
-    def check(self, x: int, y: int, rotation: int, grid: list[list[str]]) -> bool:
+    def rotate_left(self, grid: list[list[tuple[int,int,int]]]) -> bool:
+        next: int = (self.rotation - 1) % 4
+        if self.check(self.x,
+                      self.y,
+                      next,
+                      grid):
+            self.rotation = next
+            return True
+
+        kick_system: SRS = SRS(self.shape)
+        test_list: list[tuple[int,int]] = []
+
+        for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
+            test_list.append((c[0] + n[0], c[1] + n[1]))
+
+        print('*'*20)
+        print(test_list)
+
+        for test in test_list:
+            if self.check(self.x + test[0],
+                          self.y + test[1],
+                          next,
+                          grid):
+                self.x += test[0]
+                self.y += test[1]
+                self.rotation = next
+                return True
+        return False
+
+    def check(self, x: int, y: int,
+              rotation: int, grid: list[list[tuple[int,int,int]]]) -> bool:
         new_tetromino: list[str] = self.shape.value[rotation % len(self.shape.value)]
         for i in range(4):
             for j in range(4):
-                try:
-                    if new_tetromino[i][j] == 'o' and grid[x + i][y + j] != (0,0,0):
-                        return False
-                except IndexError:
+                if x + j >= len(grid[0]) or y + i >= len(grid):
                     continue
+                if new_tetromino[i][j] == 'o' and grid[y + i][x + j] != Colors.BLACK.value:
+                    return False
 
         max_left: int = min(i.find('o') for i in new_tetromino if i.find('o') != -1)
         if x + max_left < 0:
@@ -159,4 +179,6 @@ class Tetromino:
         return True
 
     def reset(self):
+        self.x = 3
+        self.y = 0
         self.rotation = 0

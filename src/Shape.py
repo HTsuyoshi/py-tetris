@@ -121,7 +121,7 @@ class Shape(Enum):
     SHAPE_J = [
         [
             'o   ',
-            'oooo',
+            'ooo ',
             '    ',
             '    '
         ],

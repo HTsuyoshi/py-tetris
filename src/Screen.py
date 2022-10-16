@@ -35,9 +35,4 @@ class Screen():
             pygame.display.update()
             self.fps.tick(60)
 
-            for e in pygame.event.get():
-                if e.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit(0)
-
 
