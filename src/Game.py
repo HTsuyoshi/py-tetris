@@ -7,7 +7,7 @@ from copy import copy
 
 from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Tetromino import Tetromino
-from Brick import Brick, Standard_brick
+from Brick import Brick, Standard_brick, Designer_brick, Shiny_brick
 from Content import Content
 from Colors import Colors, Color_mod
 from Logic import Logic
@@ -19,6 +19,8 @@ class Game(Content):
         self.border: int = BORDER
         self.brick_size: int = OFFSCREEN_BRICK_SIZE
         self.brick_skin: Brick = Standard_brick()
+        self.brick_skin: Brick = Designer_brick()
+        self.brick_skin: Brick = Shiny_brick()
 
     def update(self, display: Surface) -> None:
         self.game.input_action()
@@ -141,7 +143,8 @@ class Game(Content):
                             y,
                             shadow_tetromino.get_shape(),
                             Color_mod().get_shadow_from_color(shadow_tetromino.color),
-                            BRICK_SIZE)
+                            BRICK_SIZE,
+                            shadow=True)
 
     def draw_tetromino(self,
                        display: Surface,
@@ -149,7 +152,8 @@ class Game(Content):
                        y_offset: int,
                        shape: list[str],
                        color: tuple[int,int,int],
-                       brick_size: int = BRICK_SIZE):
+                       brick_size: int = BRICK_SIZE,
+                       shadow: bool = False):
         for i in range(len(shape)):
             for j in range(len(shape[0])):
                 if shape[i][j] == ' ':
@@ -163,5 +167,6 @@ class Game(Content):
                                       y,
                                       brick_size,
                                       color,
-                                      self.game.grid)
+                                      self.game.grid,
+                                      shadow)
 
