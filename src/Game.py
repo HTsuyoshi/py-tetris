@@ -162,6 +162,9 @@ class Game(Content):
                 x = x_offset + (j * brick_size)
                 y = y_offset + (i * brick_size)
 
+                if y < GAME_H_START + (2 * brick_size):
+                    continue
+
                 self.brick_skin.draw_brick(display,
                                       x,
                                       y,
