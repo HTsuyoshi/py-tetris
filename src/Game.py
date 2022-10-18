@@ -5,8 +5,9 @@ from pygame.font import SysFont, Font
 import sys
 from copy import copy
 
-from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, WINDOW_H, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
+from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Tetromino import Tetromino
+from Brick import Brick, Standard_brick
 from Content import Content
 from Colors import Colors, Color_mod
 from Logic import Logic
@@ -16,6 +17,7 @@ class Game(Content):
         self.game: Logic = Logic()
         self.border: int = BORDER
         self.brick_size: int = OFFSCREEN_BRICK_SIZE
+        self.brick_skin: Brick = Standard_brick()
 
     def update(self, display: Surface) -> None:
         self.game.input_action()
@@ -29,23 +31,31 @@ class Game(Content):
             sys.exit(0)
 
     def draw(self, display: Surface) -> None:
-        self.draw_grid(display)
-        self.draw_border(display)
         self.draw_score(display)
         self.draw_next_tetromino(display)
         self.draw_swap_tetromino(display)
+        self.draw_grid(display)
         if TETROMINO_SHADOW: self.draw_shadow_tetromino(display)
         self.draw_current_tetromino(display)
+        self.draw_border(display)
 
     def draw_grid(self, display: Surface) -> None:
         for i in range(2, len(self.game.grid)):
             for j in range(len(self.game.grid[i])):
-                pygame.draw.rect(display,
-                                 self.game.grid[i][j],
-                                 ((GAME_W_START + (j * BRICK_SIZE),
-                                 GAME_H_START + (i * BRICK_SIZE),
-                                 BRICK_SIZE,
-                                 BRICK_SIZE)))
+                if self.game.grid[i][j] != Colors.BLACK.value:
+                    self.brick_skin.draw_brick(display,
+                                               GAME_W_START + (j * BRICK_SIZE),
+                                               GAME_H_START + (i * BRICK_SIZE),
+                                               BRICK_SIZE,
+                                               self.game.grid[i][j],
+                                               self.game.grid)
+                else:
+                    pygame.draw.rect(display,
+                                     self.game.grid[i][j],
+                                     (GAME_W_START + (j * BRICK_SIZE),
+                                     GAME_H_START + (i * BRICK_SIZE),
+                                     BRICK_SIZE,
+                                     BRICK_SIZE))
 
         for i in range(2, len(self.game.grid)):
             pygame.draw.line(display,
@@ -59,21 +69,12 @@ class Game(Content):
                              (GAME_W_START + i * BRICK_SIZE, GAME_H_END))
 
     def draw_border(self, display: Surface) -> None:
-        pygame.draw.line(display,
+        pygame.draw.rect(display,
                          Colors.WHITE.value,
-                         (GAME_W_START, GAME_H_START + (2 * BRICK_SIZE)),
-                         (GAME_W_START, GAME_H_END))
-        pygame.draw.line(display,
-                         Colors.WHITE.value,
-                         (GAME_W_END, GAME_H_START + (2 * BRICK_SIZE)),
-                         (GAME_W_END, GAME_H_END))
-        pygame.draw.line(display, Colors.WHITE.value,
-                         (GAME_W_START, GAME_H_START + (2 * BRICK_SIZE)),
-                         (GAME_W_END, GAME_H_START + (2 * BRICK_SIZE)))
-        pygame.draw.line(display,
-                         Colors.WHITE.value,
-                         (GAME_W_START,GAME_H_END),
-                         (GAME_W_END, GAME_H_END))
+                         (GAME_W_START, GAME_H_START + (2 * BRICK_SIZE),
+                         (10 * BRICK_SIZE), (20 * BRICK_SIZE)),
+                         width=2
+                         )
 
     def draw_score(self, display: Surface) -> None:
         font: Font = SysFont('Source Code Variable', 30)
@@ -140,9 +141,10 @@ class Game(Content):
                 x = x_offset + (j * brick_size)
                 y = y_offset + (i * brick_size)
 
-                pygame.draw.rect(display,
-                                 tetromino.color.value,
-                                 (x, y,
-                                 brick_size,
-                                 brick_size))
+                self.brick_skin.draw_brick(display,
+                                      x,
+                                      y,
+                                      brick_size,
+                                      tetromino.color.value,
+                                      self.game.grid)
 

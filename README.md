@@ -26,7 +26,7 @@ python3 src/main.py
 - `z`: rotate left
 - `x`: rotate right
 - `k`: rotate 180
-- `c`: hold tetromino
+- `c`: swap tetromino
 
 ## Specifications
 

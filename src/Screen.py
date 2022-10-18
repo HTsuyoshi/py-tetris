@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame
 from pygame.surface import Surface
 from pygame.time import Clock
 from enum import Enum

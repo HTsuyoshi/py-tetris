@@ -39,5 +39,12 @@ class Color_mod:
                 Colors.ORANGE: Colors.SHADOW_ORANGE,
                 Colors.CYAN: Colors.SHADOW_CYAN,
                 Colors.PURPLE: Colors.SHADOW_PURPLE,
-                Colors.YELLOW: Colors.SHADOW_YELLOW
+                Colors.YELLOW: Colors.SHADOW_YELLOW,
+                Colors.SHADOW_GREEN: Colors.SHADOW_GREEN,
+                Colors.SHADOW_RED: Colors.SHADOW_RED,
+                Colors.SHADOW_BLUE: Colors.SHADOW_BLUE,
+                Colors.SHADOW_ORANGE: Colors.SHADOW_ORANGE,
+                Colors.SHADOW_CYAN: Colors.SHADOW_CYAN,
+                Colors.SHADOW_PURPLE: Colors.SHADOW_PURPLE,
+                Colors.SHADOW_YELLOW: Colors.SHADOW_YELLOW
                 }
