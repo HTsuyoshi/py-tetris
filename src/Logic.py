@@ -1,12 +1,12 @@
 import pygame
-from pygame.locals import K_h, K_j, K_k, K_l, K_z, K_x, K_c, K_a, K_SPACE
+from pygame.locals import K_h, K_j, K_k, K_l, K_z, K_x, K_c, K_a, K_q, K_SPACE
 from pygame.locals import KEYUP, KEYDOWN
 
 from typing import Optional
-from copy import copy
 
 from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop
 from Shape import Shape
+from Screen import State
 from Tetromino import Tetromino
 from Randomizer import Randomizer, TGM
 from Colors import Colors, Color_mod
@@ -47,8 +47,8 @@ class Logic():
         self.generator: Tetromino_generator = Tetromino_generator()
         self.next_tetromino()
 
-    def input_action(self) -> None:
-        if not self.current_tetromino: return
+    def input_action(self) -> State:
+        if not self.current_tetromino: return State.Stay
 
         self.frames += 1
         if self.frames % FALL_SPEED == 0:
@@ -80,6 +80,9 @@ class Logic():
                     self.swap_tetromino()
                 elif e.key == K_a:
                     self.lock_tetromino()
+                elif e.key == K_q:
+                    return State.Title
+        return State.Stay
 
     def next_tetromino(self) -> None:
         while len(self.next_tetrominos) < TETROMINO_SHOWN + 1:

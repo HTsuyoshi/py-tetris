@@ -4,10 +4,12 @@ from pygame.font import SysFont, Font
 
 import sys
 from copy import copy
+from typing import Optional
 
 from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Tetromino import Tetromino
 from Brick import Brick, Standard_brick, Designer_brick, Shiny_brick
+from Screen import State
 from Content import Content
 from Colors import Colors, Color_mod
 from Logic import Logic
@@ -22,18 +24,20 @@ class Game(Content):
         self.brick_skin: Brick = Designer_brick()
         self.brick_skin: Brick = Shiny_brick()
 
-    def update(self, display: Surface) -> None:
-        self.game.input_action()
+    def update(self, display: Surface) -> State:
+        exit: State = self.game.input_action()
+        if exit == State.Title: return exit
             # Put into Title()
             #for e in pygame.event.get():
             #    if e.type == pygame.QUIT:
             #        pygame.quit()
             #        sys.exit(0)
         if not self.game.check_alive():
-            pygame.quit()
-            sys.exit(0)
+            return State.Title
+        return State.Stay
 
     def draw(self, display: Surface) -> None:
+        self.draw_stats(display)
         self.draw_score(display)
         self.draw_next_tetromino(display)
         self.draw_swap_tetromino(display)
@@ -78,6 +82,15 @@ class Game(Content):
                          (10 * BRICK_SIZE), (20 * BRICK_SIZE)),
                          width=2
                          )
+
+    def draw_stats(self, display: Surface) -> None:
+        font: Font = SysFont('Source Code Variable', 25)
+        i: int = 1
+        for shape in Shape:
+            tetromino: Surface = font.render(f'{shape.name}: {self.game.generator.counter[shape]}', True, Colors.WHITE.value)
+            display.blit(tetromino, (WINDOW_W // 12, 300 + (i * 50)))
+            i += 1
+
 
     def draw_score(self, display: Surface) -> None:
         font: Font = SysFont('Source Code Variable', 30)
