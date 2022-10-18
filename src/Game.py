@@ -11,6 +11,7 @@ from Brick import Brick, Standard_brick
 from Content import Content
 from Colors import Colors, Color_mod
 from Logic import Logic
+from Shape import Shape
 
 class Game(Content):
     def __init__(self) -> None:
@@ -95,7 +96,8 @@ class Game(Content):
             self.draw_tetromino(display,
                                 x,
                                 y,
-                                self.game.next_tetrominos[i],
+                                self.game.next_tetrominos[i].get_shape(),
+                                self.game.next_tetrominos[i].color.value,
                                 self.brick_size)
 
     def draw_swap_tetromino(self, display: Surface) -> None:
@@ -112,7 +114,8 @@ class Game(Content):
             self.draw_tetromino(display,
                                 x,
                                 y,
-                                self.game.hold_tetromino,
+                                self.game.hold_tetromino.get_shape(),
+                                self.game.hold_tetromino.color.value,
                                 self.brick_size)
 
     def draw_current_tetromino(self, display: Surface) -> None:
@@ -120,22 +123,36 @@ class Game(Content):
 
         x = GAME_W_START + (self.game.current_tetromino.x * BRICK_SIZE)
         y = GAME_H_START + (self.game.current_tetromino.y * BRICK_SIZE)
-        self.draw_tetromino(display, x, y, self.game.current_tetromino)
+        self.draw_tetromino(display,
+                            x,
+                            y,
+                            self.game.current_tetromino.get_shape(),
+                            self.game.current_tetromino.color.value)
 
     def draw_shadow_tetromino(self, display: Surface):
         if not self.game.current_tetromino: return
 
         shadow_tetromino: Tetromino = copy(self.game.current_tetromino)
         shadow_tetromino.hard_drop(self.game.grid)
-        shadow_tetromino.color = Color_mod().get_shadow[shadow_tetromino.color]
         x = GAME_W_START + (shadow_tetromino.x * BRICK_SIZE)
         y = GAME_H_START + (shadow_tetromino.y * BRICK_SIZE)
-        self.draw_tetromino(display, x, y, shadow_tetromino)
+        self.draw_tetromino(display,
+                            x,
+                            y,
+                            shadow_tetromino.get_shape(),
+                            Color_mod().get_shadow_from_color(shadow_tetromino.color),
+                            BRICK_SIZE)
 
-    def draw_tetromino(self, display: Surface, x_offset: int, y_offset: int, tetromino: Tetromino, brick_size: int = BRICK_SIZE):
-        for i in range(len(tetromino.get_shape())):
-            for j in range(len(tetromino.get_shape()[0])):
-                if tetromino.get_shape()[i][j] == ' ':
+    def draw_tetromino(self,
+                       display: Surface,
+                       x_offset: int,
+                       y_offset: int,
+                       shape: list[str],
+                       color: tuple[int,int,int],
+                       brick_size: int = BRICK_SIZE):
+        for i in range(len(shape)):
+            for j in range(len(shape[0])):
+                if shape[i][j] == ' ':
                     continue
 
                 x = x_offset + (j * brick_size)
@@ -145,6 +162,6 @@ class Game(Content):
                                       x,
                                       y,
                                       brick_size,
-                                      tetromino.color.value,
+                                      color,
                                       self.game.grid)
 

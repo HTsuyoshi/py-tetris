@@ -33,7 +33,7 @@ class Standard_brick(Brick):
                          brick_size,
                          brick_size))
         pygame.draw.rect(display,
-                         Color_mod().get_shadow[Colors(brick_color)].value,
+                         Color_mod().get_shadow_from_tuple(brick_color),
                          (x + self.border,
                          y + self.border,
                          brick_size - self.border,

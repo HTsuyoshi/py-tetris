@@ -13,13 +13,6 @@ class Colors(Enum):
     YELLOW = (255,255,0)
     PURPLE = (127,0,127)
     ORANGE = (255,127,0)
-    SHADOW_RED = (127,0,0)
-    SHADOW_GREEN = (0,127,0)
-    SHADOW_BLUE = (0,0,127)
-    SHADOW_CYAN = (0,127,127)
-    SHADOW_YELLOW = (127,127,0)
-    SHADOW_PURPLE = (63,0,63)
-    SHADOW_ORANGE = (127,63,0)
 
 class Color_mod:
     def __init__(self):
@@ -32,19 +25,9 @@ class Color_mod:
                 Shape.SHAPE_T: Colors.PURPLE,
                 Shape.SHAPE_O: Colors.YELLOW
                 }
-        self.get_shadow = {
-                Colors.GREEN: Colors.SHADOW_GREEN,
-                Colors.RED: Colors.SHADOW_RED,
-                Colors.BLUE: Colors.SHADOW_BLUE,
-                Colors.ORANGE: Colors.SHADOW_ORANGE,
-                Colors.CYAN: Colors.SHADOW_CYAN,
-                Colors.PURPLE: Colors.SHADOW_PURPLE,
-                Colors.YELLOW: Colors.SHADOW_YELLOW,
-                Colors.SHADOW_GREEN: Colors.SHADOW_GREEN,
-                Colors.SHADOW_RED: Colors.SHADOW_RED,
-                Colors.SHADOW_BLUE: Colors.SHADOW_BLUE,
-                Colors.SHADOW_ORANGE: Colors.SHADOW_ORANGE,
-                Colors.SHADOW_CYAN: Colors.SHADOW_CYAN,
-                Colors.SHADOW_PURPLE: Colors.SHADOW_PURPLE,
-                Colors.SHADOW_YELLOW: Colors.SHADOW_YELLOW
-                }
+
+    def get_shadow_from_color(self, color: Colors) -> tuple[int,int,int]:
+        return (color.value[0] // 2, color.value[1] // 2, color.value[2] // 2)
+
+    def get_shadow_from_tuple(self, color: tuple[int,int,int]) -> tuple[int,int,int]:
+        return (color[0] // 2, color[1] // 2, color[2] // 2)
