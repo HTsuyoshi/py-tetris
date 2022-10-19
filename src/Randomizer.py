@@ -6,12 +6,16 @@ from Shape import Shape
 from copy import copy
 
 class Randomizer(abc.ABC):
-    def __init__(self):
-        self.tetrominos: dict[int, Tetromino] = dict(zip(range(len(Shape)), [Tetromino(shape) for shape in Shape]))
-        self.tries: int = 6
-
     @abc.abstractclassmethod
     def get_random(self) -> Tetromino:
+        tetrominos: dict[int, Tetromino] = dict(zip(range(len(Shape)), [Tetromino(shape) for shape in Shape]))
+        return copy(tetrominos[randint(0,len(tetrominos.keys()) - 1)])
+
+class Classic_tetris(Randomizer):
+    def __init__(self):
+        self.tetrominos: dict[int, Tetromino] = dict(zip(range(len(Shape)), [Tetromino(shape) for shape in Shape]))
+
+    def get_random(self, history: list[Shape]) -> Tetromino:
         return copy(self.tetrominos[randint(0,len(self.tetrominos.keys()) - 1)])
 
 class TGM(Randomizer):
