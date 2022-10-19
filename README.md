@@ -4,19 +4,25 @@ A little project using pygame.
 
 ## Play
 
-### 1 - Install the dependencies in `requirements.txt`.
+### 1 - Create virtual environment.
+
+```sh
+python3 -m venv venv
+```
+
+### 2 - Install the dependencies in `requirements.txt`.
 
 ```sh
 python3 -m pip install -r requirements.txt
 ```
 
-### 2 - Run
+### 3 - Run
 
 ```sh
 python3 src/main.py
 ```
 
-### 3 - Keys
+### 4 - Keys
 
 - `space`: hard drop
 - `a`: lock tetromino
