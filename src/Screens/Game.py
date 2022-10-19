@@ -25,11 +25,7 @@ class Game(Content):
     def update(self, display: Surface) -> State:
         exit: State = self.game.input_action()
         if exit == State.Title: return exit
-            # Put into Title()
-            #for e in pygame.event.get():
-            #    if e.type == pygame.QUIT:
-            #        pygame.quit()
-            #        sys.exit(0)
+        # TODO Game over
         if not self.game.check_alive():
             return State.Title
         return State.Stay
