@@ -8,7 +8,7 @@ from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, K
 from Shape import Shape
 from Screen import State
 from Tetromino import Tetromino
-from Randomizer import Randomizer, TGM
+from Randomizer import Randomizer, TGM, Classic_tetris, Modern_tetris
 from Colors import Colors, Color_mod
 
 class Tetromino_generator:
@@ -22,7 +22,7 @@ class Tetromino_generator:
                 Shape.SHAPE_O: 0,
                 Shape.SHAPE_T: 0
                 }
-        self.randomizer: Randomizer = TGM()
+        self.randomizer: Randomizer = Modern_tetris() #TGM(), Classic_tetris, Modern_tetris
         self.history: list[Shape] = []
 
     def next_tetromino(self) -> Tetromino:

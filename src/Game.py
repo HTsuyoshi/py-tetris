@@ -8,7 +8,7 @@ from typing import Optional
 
 from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Tetromino import Tetromino
-from Brick import Brick, Standard_brick, Designer_brick, Shiny_brick
+from Brick import Brick, Standard_brick, Line_brick, Shiny_brick, Open_brick, Border_brick
 from Screen import State
 from Content import Content
 from Colors import Colors, Color_mod
@@ -20,9 +20,7 @@ class Game(Content):
         self.game: Logic = Logic()
         self.border: int = BORDER
         self.brick_size: int = OFFSCREEN_BRICK_SIZE
-        self.brick_skin: Brick = Standard_brick()
-        self.brick_skin: Brick = Designer_brick()
-        self.brick_skin: Brick = Shiny_brick()
+        self.brick_skin: Brick = Border_brick() # Standard_brick(), Line_brick(), Shiny_brick(), Border_brick()
 
     def update(self, display: Surface) -> State:
         exit: State = self.game.input_action()

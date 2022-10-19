@@ -1,5 +1,5 @@
 import abc
-from random import randint
+from random import randint, shuffle
 
 from Tetromino import Tetromino
 from Shape import Shape
@@ -17,6 +17,18 @@ class Classic_tetris(Randomizer):
 
     def get_random(self, history: list[Shape]) -> Tetromino:
         return copy(self.tetrominos[randint(0,len(self.tetrominos.keys()) - 1)])
+
+class Modern_tetris(Randomizer):
+    def __init__(self):
+        self.tetrominos: list[Shape] = []
+
+    def fill_tetromino_bag(self) -> None:
+        self.tetrominos  = [shape for shape in Shape]
+        shuffle(self.tetrominos)
+
+    def get_random(self, history: list[Shape]) -> Tetromino:
+        if len(self.tetrominos) == 0: self.fill_tetromino_bag()
+        return Tetromino(self.tetrominos.pop(0))
 
 class TGM(Randomizer):
     def __init__(self):
