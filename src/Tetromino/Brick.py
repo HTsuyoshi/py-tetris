@@ -2,7 +2,7 @@ import pygame
 from pygame.surface import Surface
 
 import abc
-from Colors import Colors, Color_mod
+from Options.Colors import Colors, Color_mod
 
 class Brick(abc.ABC):
     def draw_brick(self,

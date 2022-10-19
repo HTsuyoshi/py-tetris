@@ -1,6 +1,6 @@
 from enum import Enum
 
-from Shape import Shape
+from Tetromino.Shape import Shape
 
 class Colors(Enum):
     BLACK = (0,0,0)

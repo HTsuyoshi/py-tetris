@@ -6,14 +6,14 @@ import sys
 from copy import copy
 from typing import Optional
 
-from Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
-from Tetromino import Tetromino
-from Brick import Brick, Standard_brick, Line_brick, Shiny_brick, Open_brick, Border_brick
-from Screen import State
-from Content import Content
-from Colors import Colors, Color_mod
-from Logic import Logic
-from Shape import Shape
+from Options.Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
+from Options.Colors import Colors, Color_mod
+from Tetromino.Tetromino import Tetromino
+from Tetromino.Brick import Brick, Standard_brick, Line_brick, Shiny_brick, Open_brick, Border_brick
+from Screens.Screen import State
+from Screens.Content import Content
+from Logic.Logic import Logic
+from Tetromino.Shape import Shape
 
 class Game(Content):
     def __init__(self) -> None:

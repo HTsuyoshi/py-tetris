@@ -4,12 +4,12 @@ from pygame.locals import KEYUP, KEYDOWN
 
 from typing import Optional
 
-from Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop
-from Shape import Shape
-from Screen import State
-from Tetromino import Tetromino
-from Randomizer import Randomizer, TGM, Classic_tetris, Modern_tetris
-from Colors import Colors, Color_mod
+from Options.Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop
+from Options.Colors import Colors, Color_mod
+from Tetromino.Shape import Shape
+from Tetromino.Tetromino import Tetromino
+from Logic.Randomizer import Randomizer, TGM, Classic_tetris, Modern_tetris
+from Screens.Screen import State
 
 class Tetromino_generator:
     def __init__(self):

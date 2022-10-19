@@ -1,9 +1,9 @@
 import abc
 from random import randint, shuffle
-
-from Tetromino import Tetromino
-from Shape import Shape
 from copy import copy
+
+from Tetromino.Tetromino import Tetromino
+from Tetromino.Shape import Shape
 
 class Randomizer(abc.ABC):
     @abc.abstractclassmethod

@@ -1,5 +1,5 @@
-from Shape import Shape
-from Colors import Colors, Color_mod
+from Tetromino.Shape import Shape
+from Options.Colors import Colors, Color_mod
 
 # SRS System (J,L,S,T,Z)
 #   Offset 1 Offset 2 Offset 3 Offset 4 Offset 5

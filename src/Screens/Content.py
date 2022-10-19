@@ -6,7 +6,8 @@ from enum import Enum
 class State(Enum):
     Stay = -1
     Title = 0
-    Game = 1
+    Settings = 1
+    Game = 2
 
 class Content(abc.ABC):
     @abc.abstractclassmethod
