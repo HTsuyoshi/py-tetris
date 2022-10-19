@@ -2,7 +2,6 @@ import pygame
 from pygame.surface import Surface
 
 import abc
-from enum import Enum
 from Colors import Colors, Color_mod
 
 class Brick(abc.ABC):
@@ -12,7 +11,6 @@ class Brick(abc.ABC):
                    y: int,
                    brick_size: int,
                    brick_color: tuple[int, int, int],
-                   grid: list[list[tuple[int, int, int]]],
                    shadow: bool = False) -> None:
         pass
 
@@ -23,7 +21,6 @@ class Standard_brick(Brick):
                    y: int,
                    brick_size: int,
                    brick_color: tuple[int, int, int],
-                   grid: list[list[tuple[int, int, int]]],
                    shadow: bool = False) -> None:
         pygame.draw.rect(display,
                          brick_color,
@@ -42,7 +39,6 @@ class Designer_brick(Brick):
                    y: int,
                    brick_size: int,
                    brick_color: tuple[int, int, int],
-                   grid: list[list[tuple[int, int, int]]],
                    shadow: bool = False) -> None:
         pygame.draw.rect(display,
                          brick_color,
@@ -68,7 +64,6 @@ class Shiny_brick(Brick):
                    y: int,
                    brick_size: int,
                    brick_color: tuple[int, int, int],
-                   grid: list[list[tuple[int, int, int]]],
                    shadow: bool = False) -> None:
         pygame.draw.rect(display,
                          brick_color,

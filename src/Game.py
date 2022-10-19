@@ -54,8 +54,7 @@ class Game(Content):
                                                GAME_W_START + (j * BRICK_SIZE),
                                                GAME_H_START + (i * BRICK_SIZE),
                                                BRICK_SIZE,
-                                               self.game.grid[i][j],
-                                               self.game.grid)
+                                               self.game.grid[i][j])
                 else:
                     pygame.draw.rect(display,
                                      self.game.grid[i][j],
@@ -183,6 +182,5 @@ class Game(Content):
                                       y,
                                       brick_size,
                                       color,
-                                      self.game.grid,
                                       shadow)
 
