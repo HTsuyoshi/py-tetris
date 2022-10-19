@@ -23,15 +23,16 @@ class Tetromino_generator:
                 Shape.SHAPE_T: 0
                 }
         self.randomizer: Randomizer = TGM()
-        self.history: list[Tetromino] = []
+        self.history: list[Shape] = []
 
     def next_tetromino(self) -> Tetromino:
         tetromino: Tetromino = self.randomizer.get_random(self.history)
+        self.add_history(tetromino)
         self.counter[tetromino.shape] += 1
         return tetromino
 
     def add_history(self, tetromino: Tetromino):
-        self.history.append(tetromino)
+        self.history.append(tetromino.shape)
         if len(self.history) > 4:
             self.history.pop(0)
 
@@ -119,7 +120,6 @@ class Logic():
                     self.grid[self.current_tetromino.y + i][self.current_tetromino.x + j] = Color_mod().get_color[self.current_tetromino.shape].value
 
         self.can_swap = True
-        self.generator.add_history(self.current_tetromino)
         self.frames = 0
         self.clear_row()
         self.next_tetromino()

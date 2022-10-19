@@ -16,23 +16,26 @@ class Randomizer(abc.ABC):
 
 class TGM(Randomizer):
     def __init__(self):
-        self.tetrominos: dict[int, Tetromino] = dict(zip(range(len(Shape)), [Tetromino(shape) for shape in Shape]))
+        self.tetrominos: dict[int, Shape] = dict(zip(range(len(Shape)), [shape for shape in Shape]))
         self.tries: int = 6
         self.first: bool = True
 
-    def get_random(self, history: list[Tetromino]) -> Tetromino:
-        default: list[Tetromino] = [Tetromino(Shape.SHAPE_Z), Tetromino(Shape.SHAPE_Z), Tetromino(Shape.SHAPE_S), Tetromino(Shape.SHAPE_S)]
-        while len(history) < 4:
-            history.append(default.pop(0))
+    def get_random(self, history: list[Shape]) -> Tetromino:
+        default: list[Shape] = [Shape.SHAPE_Z, Shape.SHAPE_Z, Shape.SHAPE_S, Shape.SHAPE_S]
+        local_history: list[Shape] = []
+        local_history.extend(history)
 
-        tetromino: Tetromino = Tetromino(Shape.SHAPE_I)
+        while len(local_history) < 4:
+            local_history.append(default.pop(0))
+
+        shape: Shape = self.tetrominos[0]
         for _ in range(self.tries):
-            tetromino = copy(self.tetrominos[randint(0,len(self.tetrominos.keys()) - 1)])
-            if tetromino not in history:
+            shape = self.tetrominos[randint(0,len(self.tetrominos.keys()) - 1)]
+            if shape not in local_history:
                 if self.first:
-                    if tetromino.shape.value in [Shape.SHAPE_Z.value, Shape.SHAPE_S.value, Shape.SHAPE_O.value]:
+                    if shape in [Shape.SHAPE_Z, Shape.SHAPE_S, Shape.SHAPE_O]:
                         continue
+                self.first = False
                 break
 
-        self.first = False
-        return tetromino
+        return Tetromino(shape)
