@@ -31,7 +31,7 @@ class Screen():
             self.fps.tick(60)
 
     def change(self, state: State) -> None:
-        destiny: dict[State, Optional[Content]] = {
+        destiny: dict[State, Content] = {
                 State.Game: Game(),
                 State.Title: Title(),
                 State.Settings: Settings()
