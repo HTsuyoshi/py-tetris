@@ -112,11 +112,12 @@ class Tetromino:
 
         for test in test_list:
             if self.check(self.x + test[0],
-                          self.y + test[1],
+                          self.y - test[1],
                           next,
-                          grid):
+                          grid,
+                          True):
                 self.x += test[0]
-                self.y += test[1]
+                self.y -= test[1]
                 self.rotation = next
                 return True
         return False
@@ -134,15 +135,15 @@ class Tetromino:
         test_list: list[tuple[int,int]] = []
 
         for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
-            test_list.append((c[0] + n[0], c[1] + n[1]))
+            test_list.append((c[0] - n[0], c[1] - n[1]))
 
         for test in test_list:
             if self.check(self.x + test[0],
-                          self.y + test[1],
+                          self.y - test[1],
                           next,
                           grid):
                 self.x += test[0]
-                self.y += test[1]
+                self.y -= test[1]
                 self.rotation = next
                 return True
 
@@ -155,6 +156,7 @@ class Tetromino:
               grid: list[list[tuple[int,int,int]]]) -> bool:
 
         new_tetromino: list[str] = self.shape.value[rotation % len(self.shape.value)]
+
         for i in range(len(new_tetromino)):
             for j in range(len(new_tetromino)):
                 if new_tetromino[i][j] == ' ':
