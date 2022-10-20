@@ -27,7 +27,17 @@ class Color_mod:
                 }
 
     def get_shadow_from_color(self, color: Colors) -> tuple[int,int,int]:
-        return (color.value[0] // 2, color.value[1] // 2, color.value[2] // 2)
+        if color: return tuple(c // 2 for c in color.value)
+        return Colors.WHITE.value
 
     def get_shadow_from_tuple(self, color: tuple[int,int,int]) -> tuple[int,int,int]:
-        return (color[0] // 2, color[1] // 2, color[2] // 2)
+        if color: return tuple(c // 2 for c in color)
+        return Colors.WHITE.value
+
+    def get_light_from_color(self, color: Colors) -> tuple[int,int,int]:
+        if color: return tuple(max(c * 2, 255) for c in color.value)
+        return Colors.WHITE.value
+
+    def get_light_from_tuple(self, color: tuple[int,int,int]) -> tuple[int,int,int]:
+        if color: return tuple(max(c * 2, 255) for c in color)
+        return Colors.WHITE.value
