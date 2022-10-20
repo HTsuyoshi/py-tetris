@@ -4,7 +4,7 @@ from pygame.surface import Surface
 import sys
 
 from Screens.Content import Content, State
-from Options.Colors import Colors
+from Options.Colors import Colors, Color_mod
 from Options.Options import KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL
 from Options.Options import TITLE_H_START, TITLE_H_SIZE, TITLE_W_START, BUTTON_H, BUTTON_W
 from Options.Options import FONT
@@ -43,11 +43,24 @@ class Title(Content):
     def draw_buttons(self, display) -> None:
         for i in range(len(self.options)):
             pygame.draw.rect(display,
-                             Colors.GRAY.value,
+                             Colors.PURPLE.value,
                              (TITLE_W_START,
                               TITLE_H_START + (i * (BUTTON_H + self.border)),
                               BUTTON_W,
-                              BUTTON_H))
-            button_text: Surface = FONT.render(self.options[i], True, (255,0,0))
+                              BUTTON_H // 2))
+            pygame.draw.rect(display,
+                             Color_mod().get_shadow_from_color(Colors.PURPLE),
+                             (TITLE_W_START,
+                              TITLE_H_START + (i * (BUTTON_H + self.border)) + (BUTTON_H // 2),
+                              BUTTON_W,
+                              BUTTON_H // 2))
+            pygame.draw.rect(display,
+                             Color_mod().get_light_from_color(Colors.PURPLE),
+                             (TITLE_W_START,
+                              TITLE_H_START + (i * (BUTTON_H + self.border)),
+                              BUTTON_W,
+                              BUTTON_H),
+                             width=4)
+            button_text: Surface = FONT.render(self.options[i], True, Colors.WHITE.value)
             display.blit(button_text, (TITLE_W_START + (BUTTON_H // 2), TITLE_H_START + (i * (BUTTON_H + self.border))))
 

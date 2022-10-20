@@ -35,9 +35,9 @@ class Color_mod:
         return Colors.WHITE.value
 
     def get_light_from_color(self, color: Colors) -> tuple[int,int,int]:
-        if color: return tuple(max(c * 2, 255) for c in color.value)
+        if color: return tuple(min(int(c * 1.5), 255) for c in color.value)
         return Colors.WHITE.value
 
     def get_light_from_tuple(self, color: tuple[int,int,int]) -> tuple[int,int,int]:
-        if color: return tuple(max(c * 2, 255) for c in color)
+        if color: return tuple(min(int(c * 1.5), 255) for c in color)
         return Colors.WHITE.value
