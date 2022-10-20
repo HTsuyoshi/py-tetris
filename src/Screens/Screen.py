@@ -11,7 +11,7 @@ from Screens.Game import Game
 
 class Screen():
     def __init__(self) -> None:
-        self.display: Surface = pygame.display.set_mode((WINDOW_W,WINDOW_H))
+        self.display: Surface = pygame.display.set_mode((WINDOW_W,WINDOW_H), pygame.RESIZABLE)
         self.fps: Clock = Clock()
         self.state: State = State.Stay
         self.content: Content = Title()
