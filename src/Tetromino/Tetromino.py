@@ -95,35 +95,10 @@ class Tetromino:
             return True
         return False
 
-    def rotate_right(self, grid: list[list[tuple[int,int,int]]]) -> bool:
-        next: int = (self.rotation + 1) % 4
-        if self.check(self.x,
-                      self.y,
-                      next,
-                      grid):
-            self.rotation = next
-            return True
-
-        kick_system: SRS = SRS(self.shape)
-        test_list: list[tuple[int,int]] = []
-
-        for c, n in zip(kick_system.rot[self.rotation], kick_system.rot[next]):
-            test_list.append((c[0] - n[0], c[1] - n[1]))
-
-        for test in test_list:
-            if self.check(self.x + test[0],
-                          self.y - test[1],
-                          next,
-                          grid,
-                          True):
-                self.x += test[0]
-                self.y -= test[1]
-                self.rotation = next
-                return True
-        return False
-
-    def rotate_left(self, grid: list[list[tuple[int,int,int]]]) -> bool:
-        next: int = (self.rotation - 1) % 4
+    def rotate(self,
+               grid: list[list[tuple[int,int,int]]],
+               rotation: int) -> bool:
+        next: int = (self.rotation + rotation) % 4
         if self.check(self.x,
                       self.y,
                       next,
@@ -146,7 +121,6 @@ class Tetromino:
                 self.y -= test[1]
                 self.rotation = next
                 return True
-
         return False
 
     def check(self,

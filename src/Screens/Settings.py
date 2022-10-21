@@ -9,8 +9,6 @@ from Options.Options import KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL
 
 class Settings(Content):
     def __init__(self) -> None:
-        self.font: pygame.font.Font = pygame.font.SysFont('Source Code Variable', 30)
-        self.score_text: Surface = self.font.render('Score', True, (255,0,0))
         self.options: list[str] = [
                 'Play',
                 'Options',

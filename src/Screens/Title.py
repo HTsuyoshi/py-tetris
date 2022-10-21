@@ -34,7 +34,6 @@ class Title(Content):
                         if pos[1] > start and pos[1] < start + BUTTON_H:
                             pygame.quit()
                             sys.exit(0)
-        pygame.key.set_repeat(KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL)
         return State.Stay
 
     def draw(self, display: Surface) -> None:

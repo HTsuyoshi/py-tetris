@@ -74,9 +74,9 @@ class Logic():
                     self.current_tetromino.hard_drop(self.grid)
                     self.lock_tetromino()
                 elif e.key == K_z:
-                    self.current_tetromino.rotate_left(self.grid)
+                    self.current_tetromino.rotate(self.grid, -1)
                 elif e.key == K_x:
-                    self.current_tetromino.rotate_right(self.grid)
+                    self.current_tetromino.rotate(self.grid, 1)
                 elif e.key == K_c:
                     self.swap_tetromino()
                 elif e.key == K_a:
