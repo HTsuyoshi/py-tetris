@@ -53,7 +53,7 @@ class Logic():
 
         self.frames += 1
         if self.frames % FALL_SPEED == 0:
-            self.current_tetromino.down(self.grid)
+            self.current_tetromino.move(self.grid, 0, 1)
 
         if self.frames % LOCK_DELAY == 0:
             self.frames = 0
@@ -62,14 +62,14 @@ class Logic():
         for e in pygame.event.get():
             if e.type == KEYDOWN:
                 if e.key == K_h:
-                    self.current_tetromino.left(self.grid)
-                elif e.key == K_j:
-                    if SOFT_DROP == Soft_drop.NORMAL: self.current_tetromino.down(self.grid)
-                    elif SOFT_DROP == Soft_drop.INSTANT: self.current_tetromino.hard_drop(self.grid)
+                    self.current_tetromino.move(self.grid, -1, 0)
+                elif e.key == K_l:
+                    self.current_tetromino.move(self.grid, 1, 0)
                 elif e.key == K_k:
                     self.current_tetromino.rotate_180(self.grid)
-                elif e.key == K_l:
-                    self.current_tetromino.right(self.grid)
+                elif e.key == K_j:
+                    if SOFT_DROP == Soft_drop.NORMAL: self.current_tetromino.move(self.grid, 0, 1)
+                    elif SOFT_DROP == Soft_drop.INSTANT: self.current_tetromino.hard_drop(self.grid)
                 elif e.key == K_SPACE:
                     self.current_tetromino.hard_drop(self.grid)
                     self.lock_tetromino()

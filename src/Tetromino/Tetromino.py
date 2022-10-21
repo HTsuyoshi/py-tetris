@@ -55,35 +55,21 @@ class Tetromino:
     def get_shape(self) -> list[str]:
         return self.shape.value[self.rotation % len(self.shape.value)]
 
-    def right(self, grid: list[list[tuple[int,int,int]]]) -> bool:
-        if self.check(self.x + 1,
-                      self.y,
+    def move(self,
+             grid: list[list[tuple[int,int,int]]],
+             x: int,
+             y: int) -> bool:
+        if self.check(self.x + x,
+                      self.y + y,
                       self.rotation,
                       grid):
-            self.x += 1
-            return True
-        return False
-
-    def left(self, grid: list[list[tuple[int,int,int]]]) -> bool:
-        if self.check(self.x - 1,
-                      self.y,
-                      self.rotation,
-                      grid):
-            self.x -= 1
-            return True
-        return False
-
-    def down(self, grid: list[list[tuple[int,int,int]]]) -> bool:
-        if self.check(self.x,
-                      self.y + 1,
-                      self.rotation,
-                      grid):
-            self.y += 1
+            self.x += x
+            self.y += y
             return True
         return False
 
     def hard_drop(self, grid: list[list[tuple[int,int,int]]]) -> None:
-        if self.down(grid):
+        if self.move(grid, 0, 1):
             self.hard_drop(grid)
 
     def rotate_180(self, grid: list[list[tuple[int,int,int]]]) -> bool:
