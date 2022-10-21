@@ -44,3 +44,7 @@ BUTTON_W: int = WINDOW_W // 4
 TITLE_W_START: int = (WINDOW_W // 2) - (BUTTON_W // 2)
 TITLE_H_START: int = 6 * (WINDOW_H // 16)
 TITLE_H_SIZE: int = 14 * (WINDOW_H // 16)
+ICON_H: int = 2 * (BUTTON_H)
+ICON_W: int = (11 * BUTTON_W) // 8
+TITLE_ICON_W_START: int = (WINDOW_W // 2) - (ICON_W // 2)
+TITLE_ICON_H_START: int = 2 * (WINDOW_H // 16)

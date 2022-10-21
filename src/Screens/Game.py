@@ -2,9 +2,7 @@ import pygame
 from pygame.surface import Surface
 from pygame.font import SysFont, Font
 
-import sys
 from copy import copy
-from typing import Optional
 
 from Options.Options import  BRICK_SIZE, GAME_H_START, GAME_W_START, GAME_H_END, GAME_W_END, WINDOW_W, NEXT_TETROMINO_H, NEXT_TETROMINO_W, TETROMINO_SHOWN, HOLD_TETROMINO_H, HOLD_TETROMINO_W, BORDER, OFFSCREEN_BRICK_SIZE, TETROMINO_SHADOW
 from Options.Colors import Colors, Color_mod
