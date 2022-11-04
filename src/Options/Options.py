@@ -11,8 +11,8 @@ class Soft_drop(Enum):
 TETROMINO_SHOWN: int = 5
 TETROMINO_SHADOW: bool = True
 FPS: int = 60
-FALL_SPEED: int = FPS // 5
-LOCK_DELAY: int = FPS * 4
+FALL_SPEED: int = FPS // 2
+LOCK_DELAY: int = FPS * 10
 KEY_REPEAT_INTERVAL: int = 20
 KEY_REPEAT_DELAY: int = 150
 SOFT_DROP: Soft_drop = Soft_drop.INSTANT

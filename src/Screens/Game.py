@@ -18,7 +18,7 @@ class Game(Content):
         self.game: Logic = Logic()
         self.border: int = BORDER
         self.brick_size: int = OFFSCREEN_BRICK_SIZE
-        self.brick_skin: Brick = Shiny_brick() # Standard_brick(), Line_brick(), Shiny_brick(), Border_brick()
+        self.brick_skin: Brick = Shiny_brick() # Standard_brick(), Line_brick(), Shiny_brick(), Open_brick(), Border_brick()
 
     def update(self, display: Surface) -> State:
         exit: State = self.game.input_action()

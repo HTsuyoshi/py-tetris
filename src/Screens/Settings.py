@@ -2,7 +2,6 @@ import pygame
 from pygame.surface import Surface
 
 import sys
-from enum import Enum
 
 from Screens.Content import Content, State
 from Options.Options import KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL

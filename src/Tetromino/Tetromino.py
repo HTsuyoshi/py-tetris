@@ -48,6 +48,8 @@ class Tetromino:
     def __init__(self, shape: Shape) -> None:
         self.x: int = 3
         self.y: int = 0
+        self.lowest_y: int = 0
+        self.reset_delay_bool: bool = False
         self.shape: Shape = shape
         self.rotation: int = 0
         self.color: Colors = Color_mod().get_color[shape]
@@ -65,11 +67,23 @@ class Tetromino:
                       grid):
             self.x += x
             self.y += y
+            if self.y > self.lowest_y:
+                self.lowest_y = self.y
+                self.reset_delay_bool = True
+            return True
+        return False
+
+    def down(self, grid) -> bool:
+        if self.check(self.x,
+                      self.y + 1,
+                      self.rotation,
+                      grid):
+            self.y += 1
             return True
         return False
 
     def hard_drop(self, grid: list[list[tuple[int,int,int]]]) -> None:
-        if self.move(grid, 0, 1):
+        if self.down(grid):
             self.hard_drop(grid)
 
     def rotate_180(self, grid: list[list[tuple[int,int,int]]]) -> bool:
@@ -127,7 +141,14 @@ class Tetromino:
                     return False
         return True
 
-    def reset(self):
+    def reset(self) -> None:
         self.x = 3
         self.y = 0
+        self.lowest_y = 0
         self.rotation = 0
+
+    def reset_delay(self) -> bool:
+        if self.reset_delay_bool:
+            self.reset_delay_bool = False
+            return True
+        return False

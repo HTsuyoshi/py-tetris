@@ -3,7 +3,6 @@ from pygame.surface import Surface
 
 import sys
 
-from Tetromino.Shape import Shape
 from Screens.Content import Content, State
 from Screens.Game import Game
 from Options.Colors import Colors, Color_mod

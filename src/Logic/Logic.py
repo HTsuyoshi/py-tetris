@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import K_h, K_j, K_k, K_l, K_z, K_x, K_c, K_a, K_q, K_SPACE
-from pygame.locals import KEYUP, KEYDOWN
+from pygame.locals import KEYDOWN
 
 from typing import Optional
 
@@ -38,6 +38,7 @@ class Tetromino_generator:
 
 class Logic():
     def __init__(self):
+        self.lock_delay: int = LOCK_DELAY
         self.frames: int = 0
         self.score: int = 0
         self.grid: list[list[tuple[int,int,int]]] = [[(0,0,0) for _ in range(10)] for _ in range(22)]
@@ -51,12 +52,17 @@ class Logic():
     def input_action(self) -> State:
         if not self.current_tetromino: return State.Stay
 
+        self.lock_delay -= 1
         self.frames += 1
         if self.frames % FALL_SPEED == 0:
             self.current_tetromino.move(self.grid, 0, 1)
 
-        if self.frames % LOCK_DELAY == 0:
-            self.frames = 0
+        if self.current_tetromino.reset_delay():
+            self.lock_delay = LOCK_DELAY
+
+        if self.lock_delay < 0:
+            self.lock_delay = LOCK_DELAY
+            self.current_tetromino.hard_drop(self.grid)
             self.lock_tetromino()
 
         for e in pygame.event.get():
