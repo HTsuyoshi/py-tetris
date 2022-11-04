@@ -58,16 +58,19 @@ classDiagram
       +int Settings$
       +int Game$
     }
+
     class Screen{
       +Clock fps
       +State state
       +Content content
       +change(State)
     }
+
     class Content{
       +update()*
       +draw()*
     }
+
     Content <|-- Game
     class Game{
       +Logic game
@@ -86,12 +89,14 @@ classDiagram
       +draw_shadow_tetromino()
       +draw_tetromino()
     }
+
     Content <|-- Settings
     class Settings{
       +list[str] options
       +update()
       +draw()
     }
+
     Content <|-- Title
     class Title{
       +list[str] options
@@ -100,5 +105,54 @@ classDiagram
       +draw()
       +draw_buttons()
       +draw_title()
+    }
+
+    class Tetromino_generator{
+      +dict[Shape, int] counter
+      +Randomizer randomizer
+      +list[Shape] history
+      +next_tetromino()
+      +add_history()
+    }
+
+    class Randomizer{
+      +get_random()*
+    }
+
+    Randomizer <|-- Classic_tetris
+    class Classic_tetris{
+      +get_random()*
+    }
+
+    Randomizer <|-- Modern_tetris
+    class Modern_tetris{
+      +fill_tetromino_bag()*
+      +get_random()*
+    }
+
+    Randomizer <|-- TGM
+    class TGM{
+      +dict[int, Shape] tetrominos
+      +int tries
+      +bool first
+      +get_random()*
+    }
+
+    class Logic{
+      +int lock_delay
+      +int frames
+      +int score
+      +list[list[tuple[int,int,int]]] grid
+      +Optional[Tetromino] current_tetromino
+      +bool can_swap
+      +Optional[Tetromino] hold_tetromino
+      +list[Tetromino] next_tetrominos
+      +Tetromino_generator generator
+      +input_action()
+      +next_tetromino()
+      +swap_tetromino()
+      +lock_tetromino()
+      +clear_row()
+      +check_alive()
     }
 ```
