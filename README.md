@@ -47,3 +47,58 @@ Following [this guideline](https://harddrop.com/wiki/Tetris_Guideline)
 [Scoring System](https://harddrop.com/wiki/Category:Scoring_Systems): TO-DO
 
 [Tetromino Orientation](https://harddrop.com/wiki/Orientation): Default
+
+## Code classes UML
+
+```mermaid
+classDiagram
+    class State{
+      +int Stay$
+      +int Title$
+      +int Settings$
+      +int Game$
+    }
+    class Screen{
+      +Clock fps
+      +State state
+      +Content content
+      +change(State)
+    }
+    class Content{
+      +update()*
+      +draw()*
+    }
+    Content <|-- Game
+    class Game{
+      +Logic game
+      +int border
+      +int brick_size
+      +Brick brick_skin
+      +update()
+      +draw()
+      +draw_grid()
+      +draw_border()
+      +draw_stats()
+      +draw_score()
+      +draw_next_tetromino()
+      +draw_swap_tetromino()
+      +draw_current_tetromino()
+      +draw_shadow_tetromino()
+      +draw_tetromino()
+    }
+    Content <|-- Settings
+    class Settings{
+      +list[str] options
+      +update()
+      +draw()
+    }
+    Content <|-- Title
+    class Title{
+      +list[str] options
+      +int border
+      +update()
+      +draw()
+      +draw_buttons()
+      +draw_title()
+    }
+```
