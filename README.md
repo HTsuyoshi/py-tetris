@@ -155,4 +155,80 @@ classDiagram
       +clear_row()
       +check_alive()
     }
+
+    class Colors{
+      +int BLACK$
+      +int GRAY$
+      +int WHITE$
+      +int RED$
+      +int GREEN$
+      +int BLUE$
+      +int CYAN$
+      +int YELLOW$
+      +int PURPLE$
+      +int ORANGE$
+    }
+
+    class Color_mod{
+      +dict[Shape, Colors] get_color$
+      +get_shadow_from_color()
+      +get_shadow_from_tuple()
+      +get_light_from_color()
+      +get_light_from_tuple()
+    }
+
+    class Brick{
+      +draw_brick()*
+    }
+
+    Brick <|-- Standard_Brick
+    class Standard_Brick{
+      +draw_brick()
+    }
+
+    Brick <|-- Line_Brick
+    class Line_Brick{
+      +draw_brick()
+    }
+
+    Brick <|-- Shiny_Brick
+    class Shiny_Brick{
+      +draw_brick()
+    }
+
+    Brick <|-- Open_Brick
+    class Open_Brick{
+      +draw_brick()
+    }
+
+    Brick <|-- Border_Brick
+    class Border_Brick{
+      +draw_brick()
+    }
+
+    class Shape{
+      +list[list[str]] SHAPE_O$
+      +list[list[str]] SHAPE_I$
+      +list[list[str]] SHAPE_T$
+      +list[list[str]] SHAPE_S$
+      +list[list[str]] SHAPE_Z$
+      +list[list[str]] SHAPE_J$
+      +list[list[str]] SHAPE_L$
+    }
+
+    class SRS{
+      +list[list[tuple[int, int]]] rot
+    }
+
+    class Tetromino{
+      +get_shape()
+      +move()
+      +down()
+      +hard_drop()
+      +rotate_180()
+      +rotate()
+      +check()
+      +reset()
+      +reset_delay()
+    }
 ```
