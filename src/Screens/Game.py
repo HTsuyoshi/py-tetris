@@ -75,18 +75,20 @@ class Game(Content):
                          )
 
     def draw_stats(self, display: Surface) -> None:
-        font: Font = SysFont('Source Code Variable', 25)
+        font: Font = SysFont('Source Code Variable', 20)
         i: int = 1
         for shape in Shape:
             tetromino: Surface = font.render(f'{shape.name}: {self.game.generator.counter[shape]}', True, Colors.WHITE.value)
-            display.blit(tetromino, (WINDOW_W // 12, 300 + (i * 50)))
+            display.blit(tetromino, (WINDOW_W // 12, 400 + (i * 35)))
             i += 1
 
 
     def draw_score(self, display: Surface) -> None:
         font: Font = SysFont('Source Code Variable', 30)
-        score_text: Surface = font.render(f'Score: {self.game.score}', True, Colors.WHITE.value)
+        score_text: Surface = font.render(f'Score: {self.game.score.score}', True, Colors.WHITE.value)
         display.blit(score_text, (WINDOW_W // 12, 300))
+        score_text: Surface = font.render(f'Attack: {self.game.score.attack}', True, Colors.WHITE.value)
+        display.blit(score_text, (WINDOW_W // 12, 350))
 
     def draw_next_tetromino(self, display: Surface) -> None:
         for i in range(TETROMINO_SHOWN):
