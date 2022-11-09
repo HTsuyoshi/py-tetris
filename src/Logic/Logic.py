@@ -9,6 +9,7 @@ from Options.Colors import Colors, Color_mod
 from Tetromino.Shape import Shape
 from Tetromino.Tetromino import Tetromino
 from Logic.Randomizer import Randomizer, TGM, Classic_tetris, Modern_tetris
+from Logic.Score_system import Score_system, Classic_score, Modern_score
 from Screens.Screen import State
 
 class Tetromino_generator:
@@ -40,13 +41,14 @@ class Logic():
     def __init__(self):
         self.lock_delay: int = LOCK_DELAY
         self.frames: int = 0
-        self.score: int = 0
+        self.score: Score_system = Modern_score() # Classic_score()
+        self.generator: Tetromino_generator = Tetromino_generator()
+        self.combo: int = 0
         self.grid: list[list[tuple[int,int,int]]] = [[(0,0,0) for _ in range(10)] for _ in range(22)]
-        self.current_tetromino: Optional[Tetromino] = None
         self.can_swap: bool = True
+        self.current_tetromino: Optional[Tetromino] = None
         self.hold_tetromino: Optional[Tetromino] = None
         self.next_tetrominos: list[Tetromino] = []
-        self.generator: Tetromino_generator = Tetromino_generator()
         self.next_tetromino()
 
     def input_action(self) -> State:
@@ -127,14 +129,53 @@ class Logic():
 
         self.can_swap = True
         self.frames = 0
-        self.clear_row()
+        if not self.clear_row(): self.combo = 0
         self.next_tetromino()
 
-    def clear_row(self) -> None:
+    def is_t_spin(self) -> bool:
+        if not self.current_tetromino:
+            return False
+
+        if not self.current_tetromino.shape.value == Shape.SHAPE_T.value:
+            return False
+
+        occupied_blocks: int = 0
+
+        def verify_occupied(x: int, y: int) -> int:
+            if y >= len(self.grid) or x >= len(self.grid[0]): return 1
+            if self.grid[y][x] != Colors.BLACK: return 1
+            return 0
+
+        x: int = self.current_tetromino.x
+        y: int = self.current_tetromino.y
+        occupied_blocks += verify_occupied(x, y)
+        occupied_blocks += verify_occupied(x + 2, y)
+        occupied_blocks += verify_occupied(x, y + 2)
+        occupied_blocks += verify_occupied(x + 2, y + 2)
+
+        if occupied_blocks > 2: return True
+        return False
+
+    def clear_row(self) -> bool:
+        if not self.current_tetromino:
+            return False
+
+        t_spin: bool = self.is_t_spin()
+
+        # Normal Score
+        lines: int = 0
         for row in range(len(self.grid)):
             if Colors.BLACK.value not in self.grid[row]:
+                lines += 1
                 self.grid.remove(self.grid[row])
                 self.grid.insert(0, [Colors.BLACK.value for _ in range(10)])
+
+        if lines > 0:
+            self.score.add_score(lines, t_spin)
+            self.score.add_attack(lines, t_spin, self.combo)
+            self.combo += 1
+            return True
+        return False
 
     def check_alive(self) -> bool:
         if not self.current_tetromino: return False
