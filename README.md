@@ -2,6 +2,8 @@
 
 A little project using pygame.
 
+![tetris](./tetris.gif)
+
 ## Play
 
 ### 1 - Create virtual environment.
