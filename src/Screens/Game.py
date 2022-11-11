@@ -22,14 +22,17 @@ class Game(Content):
 
     def update(self, display: Surface) -> State:
         exit: State = self.game.input_action()
-        if exit == State.Title: return exit
+        if exit == State.Title:return exit
         # TODO Game over
         if not self.game.check_alive():
+            from time import sleep
+            sleep(3)
             return State.Title
         return State.Stay
 
     def draw(self, display: Surface) -> None:
         self.draw_stats(display)
+        self.draw_keys(display)
         self.draw_score(display)
         self.draw_next_tetromino(display)
         self.draw_swap_tetromino(display)
@@ -79,16 +82,30 @@ class Game(Content):
         i: int = 1
         for shape in Shape:
             tetromino: Surface = font.render(f'{shape.name}: {self.game.generator.counter[shape]}', True, Colors.WHITE.value)
-            display.blit(tetromino, (WINDOW_W // 12, 400 + (i * 35)))
+            display.blit(tetromino, (WINDOW_W // 24, 300 + (i * 35)))
             i += 1
 
+    def draw_keys(self, display: Surface) -> None:
+        font: Font = SysFont('Source Code Variable', 20)
+        options: list[str] = ['Rotate 180: k',
+                              'Rotate left: z',
+                              'Rotate right: x',
+                              'Hold tetromino: c',
+                              'Left: l',
+                              'Right: h',
+                              'Soft drop: j',
+                              'Hard drop: space']
+        i: int = 1
+        for option in options:
+            display.blit(font.render(f'{option}', True, Colors.WHITE.value), ((5 * WINDOW_W) // 24, 300 + (i * 35)))
+            i += 1
 
     def draw_score(self, display: Surface) -> None:
         font: Font = SysFont('Source Code Variable', 30)
         score_text: Surface = font.render(f'Score: {self.game.score.score}', True, Colors.WHITE.value)
-        display.blit(score_text, (WINDOW_W // 12, 300))
+        display.blit(score_text, (WINDOW_W // 24, 220))
         score_text: Surface = font.render(f'Attack: {self.game.score.attack}', True, Colors.WHITE.value)
-        display.blit(score_text, (WINDOW_W // 12, 350))
+        display.blit(score_text, (WINDOW_W // 24, 270))
 
     def draw_next_tetromino(self, display: Surface) -> None:
         for i in range(TETROMINO_SHOWN):
@@ -109,8 +126,8 @@ class Game(Content):
                                 self.brick_size)
 
     def draw_swap_tetromino(self, display: Surface) -> None:
-        x: int = HOLD_TETROMINO_H
-        y: int = HOLD_TETROMINO_W
+        x: int = HOLD_TETROMINO_W
+        y: int = HOLD_TETROMINO_H
         pygame.draw.rect(display,
                          Colors.WHITE.value,
                          (x - self.border,
