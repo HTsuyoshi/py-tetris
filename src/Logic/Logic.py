@@ -3,14 +3,20 @@ from pygame.locals import K_h, K_j, K_k, K_l, K_z, K_x, K_c, K_a, K_q, K_SPACE
 from pygame.locals import KEYDOWN
 
 from typing import Optional
+from enum import Enum
 
-from Options.Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop
+from Options.Options import FALL_SPEED, LOCK_DELAY, TETROMINO_SHOWN, KEY_REPEAT_DELAY, KEY_REPEAT_INTERVAL, SOFT_DROP, Soft_drop, GARBAGE_SPEED
 from Options.Colors import Colors, Color_mod
 from Tetromino.Shape import Shape
 from Tetromino.Tetromino import Tetromino
 from Logic.Randomizer import Randomizer, TGM, Classic_tetris, Modern_tetris
 from Logic.Score_system import Score_system, Classic_score, Modern_score
 from Screens.Screen import State
+
+class Game_mode(Enum):
+    Classic = 0
+    Garbage_mode = 1
+    Training = 2
 
 class Tetromino_generator:
     def __init__(self):
@@ -38,7 +44,8 @@ class Tetromino_generator:
             self.history.pop(0)
 
 class Logic():
-    def __init__(self):
+    def __init__(self, game_mode: Game_mode):
+        self.game_mode: Game_mode = game_mode
         self.lock_delay: int = LOCK_DELAY
         self.frames: int = 0
         self.score: Score_system = Modern_score() # Classic_score()
@@ -58,6 +65,10 @@ class Logic():
         self.frames += 1
         if self.frames % FALL_SPEED == 0:
             self.current_tetromino.move(self.grid, 0, 1)
+
+        if self.game_mode == Game_mode.Garbage_mode:
+            if self.frames % GARBAGE_SPEED == 0:
+                self.add_garbage()
 
         if self.current_tetromino.reset_delay():
             self.lock_delay = LOCK_DELAY
@@ -108,7 +119,6 @@ class Logic():
 
         self.hold_tetromino = self.current_tetromino
         self.can_swap = False
-        self.frames = 0
 
         if tetromino:
             self.current_tetromino = tetromino
@@ -128,7 +138,6 @@ class Logic():
                     self.grid[self.current_tetromino.y + i][self.current_tetromino.x + j] = Color_mod().get_color[self.current_tetromino.shape].value
 
         self.can_swap = True
-        self.frames = 0
         if not self.clear_row(): self.combo = 0
         self.next_tetromino()
 
@@ -176,6 +185,22 @@ class Logic():
             self.combo += 1
             return True
         return False
+
+    def add_garbage(self) -> None:
+        if self.current_tetromino:
+            from copy import copy
+            new_grid = copy(self.grid)
+            new_grid.pop(0)
+            garbage: list[tuple[int,int,int]] = [(127, 127, 127)] * len(self.grid[0])
+            from random import randint
+            garbage[randint(0, len(self.grid[0]) - 1)] = (0, 0, 0)
+            new_grid.append(garbage)
+            if not self.current_tetromino.check(self.current_tetromino.x,
+                                                self.current_tetromino.y,
+                                                self.current_tetromino.rotation,
+                                                new_grid):
+                self.current_tetromino.move(self.grid, 0, -1)
+            self.grid = new_grid
 
     def check_alive(self) -> bool:
         if not self.current_tetromino: return False

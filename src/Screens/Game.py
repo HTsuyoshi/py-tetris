@@ -10,12 +10,12 @@ from Tetromino.Tetromino import Tetromino
 from Tetromino.Brick import Brick, Standard_brick, Line_brick, Shiny_brick, Open_brick, Border_brick
 from Screens.Screen import State
 from Screens.Content import Content
-from Logic.Logic import Logic
+from Logic.Logic import Logic, Game_mode
 from Tetromino.Shape import Shape
 
 class Game(Content):
     def __init__(self) -> None:
-        self.game: Logic = Logic()
+        self.game: Logic = Logic(Game_mode.Garbage_mode)
         self.border: int = BORDER
         self.brick_size: int = OFFSCREEN_BRICK_SIZE
         self.brick_skin: Brick = Shiny_brick() # Standard_brick(), Line_brick(), Shiny_brick(), Open_brick(), Border_brick()
