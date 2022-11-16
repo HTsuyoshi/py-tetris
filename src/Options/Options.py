@@ -12,6 +12,7 @@ TETROMINO_SHOWN: int = 5
 TETROMINO_SHADOW: bool = True
 FPS: int = 60
 FALL_SPEED: int = FPS // 2
+GARBAGE_SPEED: int = FPS + 1
 LOCK_DELAY: int = FPS * 10
 KEY_REPEAT_INTERVAL: int = 20
 KEY_REPEAT_DELAY: int = 150
@@ -48,3 +49,8 @@ ICON_H: int = 2 * (BUTTON_H)
 ICON_W: int = (11 * BUTTON_W) // 8
 TITLE_ICON_W_START: int = (WINDOW_W // 2) - (ICON_W // 2)
 TITLE_ICON_H_START: int = 2 * (WINDOW_H // 16)
+
+# Settings
+SETTINGS_W_START: int = (WINDOW_W // 2) - (BUTTON_W // 2)
+SETTINGS_H_START: int = 6 * (WINDOW_H // 16)
+SETTINGS_H_SIZE: int = 14 * (WINDOW_H // 16)

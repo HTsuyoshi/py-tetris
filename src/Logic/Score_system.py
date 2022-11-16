@@ -40,7 +40,6 @@ class Modern_score(Score_system):
 
         if combo > 1:
             if combo in [2, 3, 4]:
-                print(attack)
                 attack = max(1, attack)
             elif combo in [5, 6]:
                 attack = max(2, attack)
